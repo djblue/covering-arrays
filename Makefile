@@ -1,7 +1,7 @@
 CC = gcc
 BIN = checker
 CFLAGS = -std=c99 -O3
-LFLAGS = -lm
+LFLAGS = -lm -fopenmp
 
 .PHONY: clean zip
 

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <omp.h>
+
 #include "vector.h"
 
 // struct to represent Covering Array
@@ -107,31 +109,25 @@ void read_input (CA *ca) {
 // different permutations, leaving for reference
 // t - the number of columns in the table
 // v - number of symbols in the table
-void calc_perm (int t, int v) {
+vector *calc_perm (int t, int v) {
 
   int rows = pow(v,t);
+
+  int *row = (int*)malloc(t*sizeof(int));
+  vector *vec = vector_create(t*sizeof(int));
 
   // columns
   for (int i = 0; i < rows; i++) {
     // rows
-    for (int j = 0; j < t; j++) {
-      printf("%d ",  ( i / ((long)pow(v,j)) ) % v);
+    for (int j = t - 1; j >= 0; j--) {
+      row[j] = ( i / ((long)pow(v,j)) ) % v;
     }
-    printf("\n");
+    vector_push(vec, row);
   }
 
-}
+  free(row);
 
-// calculate the ith permutation
-// t - the number of columns in the table
-// v - number of symbols in the table
-// i - which iteration of the loop, see previous function
-// row - array to write to
-void calc_perm_i (int t, int v, int i, int *row) {
-  // rows
-  for (int j = t - 1; j >= 0; j--) {
-    row[j] = ( i / ((long)pow(v,j)) ) % v;
-  }
+  return vec;
 }
 
 // enumerate all the combinations in a vector
@@ -209,10 +205,6 @@ void pluck_cols_from_row (int **table, int row, int *cols,
 // NOTE: no bounds checking, could fault
 int row_equal (int *row1, int *row2, int no_of_cols) {
   for (int i = 0; i < no_of_cols; i++) {
-
-    // debug prints
-    //printf("      %d == %d\n", row1[i], row2[i]);
-
     if (row1[i] != row2[i]) {
       return 0;
     }
@@ -220,83 +212,53 @@ int row_equal (int *row1, int *row2, int no_of_cols) {
   return 1;
 }
 
-// check all the combinations for a given covering array
+// check single column combination and a single symbol permutation
 // ca - an initialized covering array
 // cols - the current combination of columns
-void check_comb (CA *ca, int *cols) {
-
-  // the total number of permutations of symbols based on the
-  // the number of columns, this was given in the assignment
-  int no_of_perm = pow(ca->v, ca->t);
-
-  // debug printing
-/*
-  printf("checking cols: ");
-  for (int i = 0; i < ca->t; i++) {
-    printf("%d ", cols[i]);
-  }
-  printf("\n");
-  */
+void check (CA *ca, int *cols, int *perm) {
 
   // the permutation of values
-  int *perm = (int*) malloc(ca->t * sizeof(int));
   int *temp = (int*) malloc(ca->t * sizeof(int));
 
-  // iterate through permutations
-  for (int i = 0; i < no_of_perm; i++) {
+  int count = 0;
+  int last_find;
 
-    int count = 0;
-    int last_find;
+  // check every row in covering array
+  for (int j = 0; j < ca->N; j++) {
 
-    // calculate the ith permutation
-    calc_perm_i(ca->t, ca->v, i, perm);
+    // grab all the row valus from the different columns and
+    // compact them in to a continuous row for easy comparison
+    pluck_cols_from_row(ca->data, j, cols, ca->t, temp);
 
-    // debug printing
-  /*
-    printf("  checking perm: ");
-    for (int j = 0; j < ca->t; j++) {
-      printf("%d ", perm[j]);
-    }
-    printf("\n");
-    */
-
-    // check every row
-    for (int j = 0; j < ca->N; j++) {
-
-      // debug printing
-      // printf("    checking rows: %d \n", j);
-
-      // grab all the row valus from the different columns and
-      // compact them in to a continuous row for easy comparison
-      pluck_cols_from_row(ca->data, j, cols, ca->t, temp);
-
-      if (row_equal(perm, temp, ca->t)) {
-        count++;
-        last_find = j;
-      }
-
+    if (row_equal(perm, temp, ca->t)) {
+      count++;
+      last_find = j;
     }
 
-    // t-set doesn't have permutation, not a covering array
-    // inform user, and exit
-    if (count == 0) {
+  }
+
+  // t-set doesn't have permutation, not a covering array
+  // inform user, and exit
+  if (count == 0) {
+    #pragma omp critical
+    {
+      // don't print false more than once
       printf("false\n");
       exit(0);
     }
+  }
 
-    // useful for don't cares
-    // if the permutation was only found once, mark it in the
-    // don't care 2d-array (dc)
-    if (count == 1) {
-      for (int k = 0; k < ca->t; k++) {
-        ca->dc[last_find][cols[k]]++;
-      }
+  // useful for don't cares
+  // if the permutation was only found once, mark it in the
+  // don't care 2d-array (dc)
+  if (count == 1) {
+    for (int k = 0; k < ca->t; k++) {
+      #pragma omp critical
+      ca->dc[last_find][cols[k]]++;
     }
-
   }
 
   // free dynamic memory
-  free(perm);
   free(temp);
   
 }
@@ -308,16 +270,17 @@ int main () {
   // read input from stdin
   read_input(&ca);
 
-  // print for debug
-  // print_ca(&ca);
-
   // calculate all the combinations of the columns in the covering
   // array.
-  vector *v = calc_comb(ca.k, ca.t);
+  vector *comb = calc_comb(ca.k, ca.t);
+  vector *perm = calc_perm(ca.t, ca.v);
 
-  // check all the combination
-  for (int i = 0; i < v->length; i++) {
-    check_comb(&ca, vector_get(v, i));
+  // check all the combination and permutations
+  #pragma omp parallel for shared(ca,comb,perm)
+  for (int i = 0; i < comb->length; i++) {
+    for (int j = 0; j < perm->length; j++) {
+      check(&ca, vector_get(comb, i), vector_get(perm, j));
+    }
   }
 
   // if the program hasn't exited yet, then the input
@@ -326,7 +289,9 @@ int main () {
   print_dc(&ca);
 
   // free all the dynamic memory
-  vector_free(v);
+  vector_free(comb);
+  vector_free(perm);
+
   free_data(ca.data, ca.N);
   free_data(ca.dc, ca.N);
 
