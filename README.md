@@ -7,6 +7,7 @@ This program will verify a covering arrays and identify "don't care" positions.
 The input is always rad from `stdin` and is expected to be in the following
 format:
 
+```
 N t k v
 1 0 ... k
 .
@@ -20,6 +21,7 @@ N - number of rows
 t - number of columns per t-set
 k - number of columns
 v - number of symbols
+```
 
 # Output
 
