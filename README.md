@@ -1,6 +1,7 @@
 # Covering Arrays
 
-This program will verify a covering arrays and identify "don't care" positions.
+This program will verify if its input is a covering array and identify "don't
+care" positions if it is indeed a covering array.
 
 # Input
 
@@ -70,8 +71,8 @@ are fixed in size.
 
 ### 3. Discuss the data structure used to keep track of "don't care" positions.
 
-Alone with the covering array, the CA structure also contains a `dc` field to
-represent all the don't care positions. As we traverse the data 2d-array  with
+Along with the covering array, the CA structure also contains a `dc` field to
+represent all the don't care positions. As we traverse the `data` 2d-array  with
 respect to combinations of columns and permutations of symbols, I keep
 track/count the number of occurrences in the `dc` 2d-array. If any elements are
 0, then the input in not a covering array, if any of the positions are 1, they
