@@ -126,7 +126,7 @@ against it.
 Below are the numerical results from my final analysis of both the serial
 and the parallel program run on the ASURE cluster.
 
-![plot](plot.png)
+![plot](./plot.png)
 
 | #  | N    | t   | k     | v   | serial  | parallel |
 |----|------|-----|-------|-----|---------|----------|
