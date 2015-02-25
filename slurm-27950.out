@@ -1,0 +1,165 @@
+01-CA(6;2,5,2)(1)
+checker-serial
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.011s
+user	0m0.100s
+sys	0m0.002s
+02-CA(10;2,20,2)(1)
+checker-serial
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.006s
+03-CA(11;2,50,2)(1)
+checker-serial
+
+real	0m0.002s
+user	0m0.001s
+sys	0m0.001s
+checker-parallel
+
+real	0m0.002s
+user	0m0.009s
+sys	0m0.000s
+04-CA(21;2,25,3)(1)
+checker-serial
+
+real	0m0.002s
+user	0m0.001s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.002s
+user	0m0.003s
+sys	0m0.005s
+05-CA(30;2,100,3)(1)
+checker-serial
+
+real	0m0.011s
+user	0m0.011s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.005s
+user	0m0.034s
+sys	0m0.000s
+06-CA(25;3,20,2)(1)
+checker-serial
+
+real	0m0.004s
+user	0m0.003s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.003s
+user	0m0.009s
+sys	0m0.004s
+07-CA(40;3,75,2)(1)
+checker-serial
+
+real	0m0.178s
+user	0m0.176s
+sys	0m0.002s
+checker-parallel
+
+real	0m0.035s
+user	0m0.359s
+sys	0m0.005s
+08-CA(92;3,20,3)(1)
+checker-serial
+
+real	0m0.022s
+user	0m0.022s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.007s
+user	0m0.050s
+sys	0m0.002s
+09-CA(159;3,100,3)(1)
+checker-serial
+
+real	0m5.092s
+user	0m5.091s
+sys	0m0.002s
+checker-parallel
+
+real	0m1.021s
+user	0m10.588s
+sys	0m0.019s
+10-CA(35;2,250,3)(1)
+checker-serial
+
+real	0m0.066s
+user	0m0.063s
+sys	0m0.002s
+checker-parallel
+
+real	0m0.022s
+user	0m0.208s
+sys	0m0.012s
+11-CA(6;2,5,2)-f(1)
+checker-serial
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.002s
+user	0m0.000s
+sys	0m0.004s
+12-CA(10;2,20,2)-f(1)
+checker-serial
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.002s
+user	0m0.004s
+sys	0m0.000s
+13-CA(11;2,50,2)-f(1)
+checker-serial
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.002s
+user	0m0.003s
+sys	0m0.001s
+14-CA(21;2,25,3)-f(1)
+checker-serial
+
+real	0m0.001s
+user	0m0.000s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.002s
+user	0m0.003s
+sys	0m0.000s
+15-CA(30;2,100,3)-f(1)
+checker-serial
+
+real	0m0.002s
+user	0m0.001s
+sys	0m0.000s
+checker-parallel
+
+real	0m0.003s
+user	0m0.011s
+sys	0m0.002s
