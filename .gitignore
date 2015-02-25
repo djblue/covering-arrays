@@ -1,2 +1,4 @@
 checker
+checker-parallel
+checker-serial
 *.zip

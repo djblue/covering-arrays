@@ -6,7 +6,11 @@ for file in $(ls tests); do
 
   # display the file name
   echo $file
+
   # run the checker against the file
-  ./checker < ./tests/$file
+  echo 'checker-serial'
+  time ./checker-serial < ./tests/$file > /dev/null
+  echo 'checker-parallel'
+  time ./checker-parallel < ./tests/$file > /dev/null
 
 done
